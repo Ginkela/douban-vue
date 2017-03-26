@@ -35,7 +35,6 @@
 
 <style>
 	.header{
-		width: 100%;
 		padding: 10px 0px;
 		overflow: hidden;
 		border-bottom: 1px solid #f3f3f3;

@@ -6,11 +6,11 @@
 			<div class="movie-showing">
 				<header>
 					<h2>影院热映</h2>
-					<div>更多</div>
+					<div @click="inTheaters_click">更多</div>
 				</header>
 				<div class="section-content">
-					<ul v-for="item in inTheatersSimple">
-						<li>
+					<ul>
+						<li v-for="item in inTheatersSimple">
 							<div class="movie-content" :id="item.id">
 								<img :src="item.images.medium" alt="item.images.alt">
 								<h3>{{ item.title }}</h3>
@@ -27,8 +27,8 @@
 					<div>更多</div>
 				</header>
 				<div class="section-content">
-					<ul v-for="item in commingSoonSimple">
-						<li>
+					<ul>
+						<li v-for="item in commingSoonSimple">
 							<div class="movie-content" :id="item.id">
 								<img :src="item.images.medium" alt="item.images.alt">
 								<h3>{{ item.title }}</h3>
@@ -60,7 +60,7 @@
 			navbarHead
 			// star-rating
 		},
-		mounted () {
+		mounted() {
 			this.$http.jsonp("http://api.douban.com/v2/movie/in_theaters")
 				.then(res => {
 					this.inTheaters = res.body.subjects;
@@ -76,7 +76,11 @@
 					console.log(res);
 				})
 		},
-		methods () {
+		methods: {
+			inTheaters_click: function(){
+				this.$router.push('/inTheaters');
+			},
+
 		}
 	}
 </script>
@@ -84,12 +88,10 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	.card{
-		max-width: 650px;
+		max-width: 780px;
 		margin: 0 auto;
 	}
-	.movie-showing{
-		width: 100%;
-	}
+
 	.movie-showing header{
 		padding: 10px 20px;
 		overflow: hidden;
@@ -106,13 +108,18 @@
 		cursor: pointer;
 	}
 	.movie-showing .section-content{
-		min-width:650px; 
+		height: 200px;
+		overflow: hidden;
 	}
 	.movie-showing .section-content ul{
-		display: inline-block;
+		height: 220px;
+		font-size: 0;
+		white-space: nowrap;
+		overflow-x: auto;
 	}
 	.movie-showing .section-content ul li{
 		margin-left: 0.48rem;
+		display: inline-block;
 	}
 	.movie-content{
 		cursor: pointer;
