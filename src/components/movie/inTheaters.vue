@@ -34,13 +34,15 @@
 			navbarHead
 		},
 		mounted() {
-			this.$http.jsonp("http://api.douban.com/v2/movie/in_theaters")
-				.then(res => {
-					this.inTheaters = res.body.subjects;
-					this.inTheatersShow = this.inTheaters.slice(0, 18);
-				}).catch(res => {
-					console.log(res);
-				})
+			this.inTheaters = this.$store.getters.get_inTheaters;
+			this.inTheatersShow = this.inTheaters.slice(0, 18);
+			// this.$http.jsonp("http://api.douban.com/v2/movie/in_theaters")
+			// 	.then(res => {
+			// 		this.inTheaters = res.body.subjects;
+			// 		this.inTheatersShow = this.inTheaters.slice(0, 18);
+			// 	}).catch(res => {
+			// 		console.log(res);
+			// 	})
 		}
 		// methods: {
 

@@ -8,6 +8,9 @@ export default {
   created: function(){
     this.$router.push('/allMoviePage')
   }
+ //  mounted: function(){
+
+ //  }
 }
 </script>
 

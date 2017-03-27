@@ -63,14 +63,16 @@
 		mounted() {
 			this.$http.jsonp("http://api.douban.com/v2/movie/in_theaters")
 				.then(res => {
-					this.inTheaters = res.body.subjects;
+					this.$store.dispatch('get_inTheaters',res.body.subjects);
+					this.inTheaters = this.$store.getters.get_inTheaters;
 					this.inTheatersSimple = this.inTheaters.slice(0,6);
 				}).catch(res => {
 					console.log(res);
 				})
 			this.$http.jsonp("http://api.douban.com/v2/movie/coming_soon")
 				.then((res)=>{
-					this.commingSoon = res.body.subjects;
+					this.$store.dispatch('get_commingSoon',res.body.subjects);
+					this.commingSoon = this.$store.getters.get_commingSoon;
 					this.commingSoonSimple = this.commingSoon.slice(0,6);
 				}).catch(res => {
 					console.log(res);
@@ -79,8 +81,7 @@
 		methods: {
 			inTheaters_click: function(){
 				this.$router.push('/inTheaters');
-			},
-
+			}
 		}
 	}
 </script>
@@ -123,15 +124,20 @@
 	}
 	.movie-content{
 		cursor: pointer;
+		width: 100px;
 	}
 	.movie-content img{
 		height: 143px;
+		max-width: 100px;
 	}
 	.movie-content h3{
 		margin-top: 5px;
 		font-size: 15px;
 		font-weight: normal;
 		text-align: center;
+		white-space:nowrap; 
+		text-overflow:ellipsis;
+		overflow: hidden;
 	}
 	.movie-content h4{
 		font-size: 10px;
