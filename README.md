@@ -1,2 +1,2 @@
 # douban-vue
-vue-cli+vue-router+vue-resouce+webpack
+vue2.0+vue-cli+vue-router+vue-resouce+vuex
