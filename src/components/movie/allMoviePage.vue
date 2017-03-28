@@ -10,12 +10,13 @@
 				</header>
 				<div class="section-content">
 					<ul>
-						<li v-for="item in inTheatersSimple">
-							<div class="movie-content" :id="item.id">
-								<img :src="item.images.medium" alt="item.images.alt">
+						<li v-for="item in inTheaters">
+							<div class="movie-content" :id="item.id" @click="movie_click">
+								<img :src="item.images.medium" :alt="item.images.alt">
 								<h3>{{ item.title }}</h3>
 <!-- 								<star-rating><star-rating> -->
-								<h4>{{ item.rating.average }}</h4>
+								<h4 v-if="item.rating.average != 0">{{ item.rating.average }}</h4>
+								<h4 v-if="item.rating.average == 0">暂无评分</h4>
 							</div>
 						</li>
 					</ul>
@@ -24,16 +25,14 @@
 			<div class="movie-showing">
 				<header>
 					<h2>即将上映</h2>
-					<div>更多</div>
+					<div @click="commingSoon_click">更多</div>
 				</header>
 				<div class="section-content">
 					<ul>
-						<li v-for="item in commingSoonSimple">
+						<li v-for="item in commingSoon">
 							<div class="movie-content" :id="item.id">
 								<img :src="item.images.medium" alt="item.images.alt">
 								<h3>{{ item.title }}</h3>
-<!-- 								<star-rating><star-rating> -->
-								<h4>{{ item.rating.average }}</h4>
 							</div>
 						</li>
 					</ul>
@@ -51,9 +50,7 @@
 			return {
 				loading: true,
 				inTheaters: [],
-				inTheatersSimple: [],
 				commingSoon: [],
-				commingSoonSimple: []
 			}
 		},
 		components: {
@@ -61,26 +58,37 @@
 			// star-rating
 		},
 		mounted() {
-			this.$http.jsonp("http://api.douban.com/v2/movie/in_theaters")
-				.then(res => {
-					this.$store.dispatch('get_inTheaters',res.body.subjects);
-					this.inTheaters = this.$store.getters.get_inTheaters;
-					this.inTheatersSimple = this.inTheaters.slice(0,6);
-				}).catch(res => {
-					console.log(res);
-				})
-			this.$http.jsonp("http://api.douban.com/v2/movie/coming_soon")
-				.then((res)=>{
-					this.$store.dispatch('get_commingSoon',res.body.subjects);
-					this.commingSoon = this.$store.getters.get_commingSoon;
-					this.commingSoonSimple = this.commingSoon.slice(0,6);
-				}).catch(res => {
-					console.log(res);
-				})
+			if(this.$store.getters.get_inTheaters.length == 0){
+				this.$http.jsonp("http://api.douban.com/v2/movie/in_theaters?count=6")
+					.then(res => {
+						this.inTheaters = res.body.subjects;
+					}).catch(res => {
+						console.log(res);
+					})
+			}else{
+				this.inTheaters = this.$store.getters.get_inTheaters.slice(0,6);
+			}
+			if(this.$store.getters.get_commingSoon.length == 0){
+				this.$http.jsonp("http://api.douban.com/v2/movie/coming_soon?count=6")
+					.then((res)=>{
+						this.commingSoon = res.body.subjects;
+					}).catch(res => {
+						console.log(res);
+					})
+			}else{
+				this.commingSoon = this.$store.getters.get_commingSoon.slice(0,6);
+			}
 		},
 		methods: {
 			inTheaters_click: function(){
 				this.$router.push('/inTheaters');
+			},
+			commingSoon_click: function(){
+				this.$router.push('/commingSoon');
+			},
+			movie_click: function(event){		
+				this.$router.push('/movieInfo');
+				this.$store.dispatch('get_movieId_data',event.currentTarget.id);
 			}
 		}
 	}

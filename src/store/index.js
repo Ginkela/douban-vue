@@ -9,7 +9,8 @@ Vue.use(vueResource);
 
 const state = {
 	inTheaters: [],
-	commingSoon: []
+	commingSoon: [],
+	movieId : ''
 }
 const getters = {
 	get_inTheaters(state){
@@ -17,6 +18,9 @@ const getters = {
 	},
 	get_commingSoon(state){
 		return state.commingSoon
+	},
+	get_movieId(state){
+		return state.movieId
 	}
 }
 

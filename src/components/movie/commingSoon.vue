@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<navbarHead></navbarHead>
-		<div class="inTheaters-wrapper">
-			<h1>影院热映</h1>
-			<div class="inTheaters-content">
+		<div class="commingSoon-wrapper">
+			<h1>即将上映</h1>
+			<div class="commingSoon-content">
 				<ul>
-					<li v-for="item in inTheaters">
-						<div class="movie-content" :id="item.id" @click="movie_click">
+					<li v-for="item in commingSoon">
+						<div class="movie-content" :id="item.id">
 							<img :src="item.images.medium" alt="item.images.alt">
 							<h3>{{ item.title }}</h3>
 <!-- 								<star-rating><star-rating> -->
@@ -27,37 +27,34 @@
 		data(){
 			return{
 				loading: true,
-				inTheaters: []
+				commingSoon: []
 			}
 		},
 		components: {
 			navbarHead
 		},
 		mounted() {
-			if(this.$store.getters.get_inTheaters.length == 0){
-				this.$http.jsonp("http://api.douban.com/v2/movie/in_theaters?count=18")
+			if(this.$store.getters.get_commingSoon.length == 0){
+			this.$http.jsonp("http://api.douban.com/v2/movie/coming_soon?count=18")
 				.then(res => {
-					this.inTheaters = res.body.subjects;
-					this.$store.dispatch('get_inTheaters_data',res.body.subjects);
-					this.inTheaters = this.$store.getters.get_inTheaters;
+					this.commingSoon = res.body.subjects;
+					this.$store.dispatch('get_commingSoon_data',res.body.subjects);
+					this.commingSoon = this.$store.getters.get_commingSoon;
 				}).catch(res => {
 					console.log(res);
 				})
 			}else{
-				this.inTheaters = this.$store.getters.get_inTheaters;
+				this.commingSoon = this.$store.getters.get_commingSoon;
 			}
 		},
 		methods: {
-			movie_click: function(event){		
-				this.$router.push('/movieInfo');
-				this.$store.dispatch('get_movieId_data',event.currentTarget.id);
-			}
+
 		}
 	}
 </script>
 
 <style scoped>
-	.inTheaters-wrapper{
+	.commingSoon-wrapper{
 		max-width: 600px;
 		margin: 0 auto;
 	}
@@ -69,22 +66,22 @@
 	h3,h4{
 		font-weight: normal;
 	}
-	.inTheaters-content ul{
+	.commingSoon-content ul{
 		text-align: center;
 	}
-	.inTheaters-content ul li{
+	.commingSoon-content ul li{
 		display: inline-block;
 		margin: 5px 10px;
 	}
-	.inTheaters-content ul li{
+	.commingSoon-content ul li{
 		width: 100px;
 	}
-	.inTheaters-content ul li h3{
+	.commingSoon-content ul li h3{
 		white-space:nowrap; 
 		text-overflow:ellipsis;
 		overflow: hidden;
 	}
-	.inTheaters-content ul li img{
+	.commingSoon-content ul li img{
 		height: 143px;
 		max-width: 100px;
 	}

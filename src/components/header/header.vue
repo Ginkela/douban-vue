@@ -38,7 +38,7 @@
 		padding: 10px 0px;
 		overflow: hidden;
 		border-bottom: 1px solid #f3f3f3;
-		min-width: 330px;
+		min-width: 300px;
 	}
 	.header .header-logo{
 		left: 10px;
