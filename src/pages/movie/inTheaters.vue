@@ -1,18 +1,13 @@
 <template>
 	<div>
 		<navbarHead></navbarHead>
-		<div class="inTheaters-wrapper">
+		<sync-loader :loading="loading" class="loader"></sync-loader>
+		<div class="inTheaters-wrapper" v-if="!loading">
 			<h1>影院热映</h1>
 			<div class="inTheaters-content">
 				<ul>
 					<li v-for="item in inTheaters">
-						<div class="movie-content" :id="item.id" @click="movie_click">
-							<img :src="item.images.medium" alt="item.images.alt">
-							<h3>{{ item.title }}</h3>
-<!-- 								<star-rating><star-rating> -->
-							<h4 v-if="item.rating.average != 0">{{ item.rating.average }}</h4>
-							<h4 v-if="item.rating.average == 0">暂无评分</h4>
-						</div>
+						<movie :item="item" type="inTheaters"></movie>
 					</li>
 				</ul>
 			</div>
@@ -21,8 +16,9 @@
 </template>
 
 <script>
-	import navbarHead from '../header/header';
-
+	import navbarHead from '@/components/header/header';
+	import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+	import movie from '@/components/movie'
 	export default{
 		data(){
 			return{
@@ -31,26 +27,28 @@
 			}
 		},
 		components: {
-			navbarHead
+			navbarHead,
+			movie,
+			SyncLoader
 		},
 		mounted() {
-			if(this.$store.getters.get_inTheaters.length == 0){
+			// if(this.$store.getters.get_inTheaters.length == 0){
 				this.$http.jsonp("http://api.douban.com/v2/movie/in_theaters?count=18")
 				.then(res => {
 					this.inTheaters = res.body.subjects;
 					this.$store.dispatch('get_inTheaters_data',res.body.subjects);
 					this.inTheaters = this.$store.getters.get_inTheaters;
+					this.loading = false;
 				}).catch(res => {
 					console.log(res);
 				})
-			}else{
-				this.inTheaters = this.$store.getters.get_inTheaters;
-			}
+			// }else{
+			// 	this.inTheaters = this.$store.getters.get_inTheaters;
+			// }
 		},
 		methods: {
 			movie_click: function(event){		
-				this.$router.push('/movieInfo');
-				this.$store.dispatch('get_movieId_data',event.currentTarget.id);
+				this.$router.push('/movieInfo'+event.currentTarget.id);
 			}
 		}
 	}

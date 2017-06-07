@@ -5,12 +5,6 @@
 </template>
 <script>
 export default {
-  created: function(){
-    this.$router.push('/allMoviePage')
-  }
- //  mounted: function(){
-
- //  }
 }
 </script>
 
@@ -20,4 +14,10 @@ export default {
 #app {
 
 }
+.loader{
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%)
+	}
 </style>

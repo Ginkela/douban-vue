@@ -5,7 +5,7 @@ export default{
 	get_commingSoon_data({ commit }, param ){
 		commit('GET_COMMINGSOON_DATA',{items: param})
 	},
-	get_movieId_data({ commit }, param ){
-		commit('GET_MOVIEID_DATA',{items: param})
+	get_recentSearch_data({ commit }, param ){
+		commit('GET_RECENTSEARCH_DATA',{items: param})
 	}
 }

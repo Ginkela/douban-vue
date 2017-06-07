@@ -1,6 +1,6 @@
 const GET_INTHEATERS_DATA = 'GET_INTHEATERS_DATA'
 const GET_COMMINGSOON_DATA = 'GET_COMMINGSOON_DATA'
-const GET_MOVIEID_DATA = 'GET_MOVIEID_DATA'
+const GET_RECENTSEARCH_DATA = 'GET_RECENTSEARCH_DATA'
 
 export default{
 	[GET_INTHEATERS_DATA](state,payload){
@@ -9,7 +9,9 @@ export default{
 	[GET_COMMINGSOON_DATA](state,payload){
 		state.commingSoon = payload.items;
 	},
-	[GET_MOVIEID_DATA](state,payload){
-		state.movieId = payload.items;
+	[GET_RECENTSEARCH_DATA](state,payload){
+		if(state.recentSearch.indexOf(payload.items)<0){
+			state.recentSearch.push(payload.items);
+		}
 	}
 }

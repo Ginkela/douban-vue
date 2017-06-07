@@ -1,18 +1,13 @@
 <template>
 	<div>
 		<navbarHead></navbarHead>
-		<div class="commingSoon-wrapper">
+		<sync-loader :loading="loading" class="loader"></sync-loader>
+		<div class="commingSoon-wrapper" v-if="!loading">
 			<h1>即将上映</h1>
 			<div class="commingSoon-content">
 				<ul>
 					<li v-for="item in commingSoon">
-						<div class="movie-content" :id="item.id">
-							<img :src="item.images.medium" alt="item.images.alt">
-							<h3>{{ item.title }}</h3>
-<!-- 								<star-rating><star-rating> -->
-							<h4 v-if="item.rating.average != 0">{{ item.rating.average }}</h4>
-							<h4 v-if="item.rating.average == 0">暂无评分</h4>
-						</div>
+						<movie :item="item" type="commingSoon"></movie>
 					</li>
 				</ul>
 			</div>
@@ -21,8 +16,9 @@
 </template>
 
 <script>
-	import navbarHead from '../header/header';
-
+	import navbarHead from '@/components/header/header';
+	import movie from '@/components/movie'
+	import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 	export default{
 		data(){
 			return{
@@ -31,21 +27,24 @@
 			}
 		},
 		components: {
-			navbarHead
+			navbarHead,
+			movie,
+			SyncLoader
 		},
 		mounted() {
-			if(this.$store.getters.get_commingSoon.length == 0){
+			// if(this.$store.getters.get_commingSoon.length == 0){
 			this.$http.jsonp("http://api.douban.com/v2/movie/coming_soon?count=18")
 				.then(res => {
 					this.commingSoon = res.body.subjects;
 					this.$store.dispatch('get_commingSoon_data',res.body.subjects);
 					this.commingSoon = this.$store.getters.get_commingSoon;
+					this.loading = false;
 				}).catch(res => {
 					console.log(res);
 				})
-			}else{
-				this.commingSoon = this.$store.getters.get_commingSoon;
-			}
+			// }else{
+			// 	this.commingSoon = this.$store.getters.get_commingSoon;
+			// }
 		},
 		methods: {
 
